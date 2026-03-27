@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Quản trị — Épice</title>
+  <link th:href="@{/css/style.css}" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a class="navbar-brand" th:href="@{/}">
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 3C14 3 8 7 8 14C8 17.5 10 21 14 24C18 21 20 17.5 20 14C20 7 14 3 14 3Z" fill="currentColor" opacity="0.9"/>
+        <path d="M14 8C14 8 10 11 10 14C10 16 11 18 14 20C17 18 18 16 18 14C18 11 14 8 14 8Z" fill="#0f0f0f"/>
+      </svg>
+      <span>Épice</span>
+    </a>
+    <div class="navbar-links">
+      <a th:href="@{/}">Trang chủ</a>
+      <a th:href="@{/recipes/public}">Công thức</a>
+      <a th:href="@{/recipes/create}">Đăng công thức</a>
+      <a th:href="@{/recipes/my-recipes}">Công thức của tôi</a>
+      <a th:href="@{/admin}" style="color:var(--gold);">Quản trị</a>
+      <div class="divider"></div>
+      <form th:action="@{/logout}" method="post" style="display:inline;">
+        <button type="submit" class="btn-ghost">Đăng xuất</button>
+      </form>
+    </div>
+  </nav>
+
+  <div th:if="${success}" class="page-container narrow">
+    <div class="alert alert-success" th:text="${success}"></div>
+  </div>
+  <div th:if="${error}" class="page-container narrow">
+    <div class="alert alert-error" th:text="${error}"></div>
+  </div>
+
+  <div class="page-container">
+    <div class="section-header">
+      <h2 class="section-title">Bảng <em>quản trị</em></h2>
+    </div>
+
+    <div th:if="${pendingRecipes != null and !pendingRecipes.isEmpty()}" class="admin-pending-list">
+      <div class="section-header" style="margin-bottom:1rem;">
+        <h2 class="section-title" style="font-size:1.2rem;">Công thức chờ duyệt</h2>
+        <span class="badge badge-pending" th:text="${pendingRecipes.size()} + ' công thức'">0 công thức</span>
+      </div>
+
+      <div class="admin-card" th:each="r : ${pendingRecipes}">
+        <div class="admin-card-cover"
+             th:style="${r.coverImageUrl != null} ? 'background-image: url(' + ${r.coverImageUrl} + ')' : ''">
+          <div th:if="${r.coverImageUrl == null}" style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gold-dark);opacity:0.4;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+          </div>
+        </div>
+        <div class="admin-card-body">
+          <h3 th:text="${r.title}">Tên món</h3>
+          <p style="color:var(--text-dim); font-size:0.825rem;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span th:text="${r.authorName != null ? r.authorName : 'Ẩn danh'}">Tác giả</span>
+          </p>
+          <p th:text="${r.description != null and r.description.length() > 120 ? r.description.substring(0,120) + '...' : (r.description ?: '')}" style="font-size:0.875rem; color:var(--text-muted);">Mô tả</p>
+        </div>
+        <div class="admin-card-actions">
+          <form th:action="@{/admin/recipes/{id}/approve(id=${r.id})}" method="post">
+            <button type="submit" class="btn-sm btn-sm-success">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Duyệt
+            </button>
+          </form>
+          <form th:action="@{/admin/recipes/{id}/reject(id=${r.id})}" method="post">
+            <button type="submit" class="btn-sm btn-sm-danger">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Từ chối
+            </button>
+          </form>
+          <a th:href="@{/recipes/view/{id}(id=${r.id})}" class="btn-sm btn-sm-outline">Xem</a>
+        </div>
+      </div>
+    </div>
+
+    <div th:if="${pendingRecipes == null or pendingRecipes.isEmpty()}" class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <p>Tất cả công thức đã được duyệt. Không có gì đang chờ xử lý.</p>
+      <a th:href="@{/}" class="btn-gold">Về trang chủ</a>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="footer-brand">Épice</div>
+    Nền tảng chia sẻ công thức nấu ăn cao cấp
+  </footer>
+
+</body>
+</html>

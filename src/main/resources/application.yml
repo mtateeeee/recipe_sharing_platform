@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: recipe-sharing-platform
+  datasource:
+    url: jdbc:h2:file:./data/recipesdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  thymeleaf:
+    cache: false
+
+# Upload folder for recipe images
+app:
+  upload-dir: ./uploads
+  jwt:
+    secret: ${JWT_SECRET:RecipeSharingPlatformSecretKeyForJWTTokenGeneration2024VeryLong}
+    expiration-ms: 86400000
+
+server:
+  port: 8090

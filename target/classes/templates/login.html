@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Đăng nhập — Épice</title>
+  <link th:href="@{/css/style.css}" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a class="navbar-brand" th:href="@{/}">
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 3C14 3 8 7 8 14C8 17.5 10 21 14 24C18 21 20 17.5 20 14C20 7 14 3 14 3Z" fill="currentColor" opacity="0.9"/>
+        <path d="M14 8C14 8 10 11 10 14C10 16 11 18 14 20C17 18 18 16 18 14C18 11 14 8 14 8Z" fill="#0f0f0f"/>
+      </svg>
+      <span>Épice</span>
+    </a>
+    <div class="navbar-links">
+      <a th:href="@{/}">Trang chủ</a>
+      <a th:href="@{/recipes/public}">Công thức</a>
+    </div>
+  </nav>
+
+  <div class="page-container narrow" style="padding-top:4rem;">
+
+    <div class="form-card">
+      <div class="divider-gold" style="margin-bottom:1.5rem;"></div>
+      <div class="form-title" style="text-align:center;">Chào mừng trở lại</div>
+      <div class="form-subtitle" style="text-align:center;">Đăng nhập để quản lý công thức của bạn</div>
+
+      <div th:if="${error}" class="alert alert-error">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span th:text="${error}">Lỗi đăng nhập</span>
+      </div>
+
+      <form th:action="@{/login}" method="post">
+        <div class="form-group">
+          <label class="form-label" for="username">Tên đăng nhập</label>
+          <input class="form-input" type="text" id="username" name="username" required autofocus placeholder="Nhập tên đăng nhập"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Mật khẩu</label>
+          <input class="form-input" type="password" id="password" name="password" required placeholder="Nhập mật khẩu"/>
+        </div>
+        <div class="form-actions" style="margin-top:1.5rem;">
+          <button type="submit" class="btn-gold" style="flex:1; justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Đăng nhập
+          </button>
+        </div>
+      </form>
+
+      <div style="text-align:center; margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border);">
+        <span style="color:var(--text-muted); font-size:0.9rem;">Chưa có tài khoản? </span>
+        <a th:href="@{/register}" style="color:var(--gold); text-decoration:none; font-weight:600;">Đăng ký ngay</a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="footer-brand">Épice</div>
+    Nền tảng chia sẻ công thức nấu ăn cao cấp
+  </footer>
+
+</body>
+</html>

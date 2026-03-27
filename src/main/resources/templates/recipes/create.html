@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Đăng công thức — Épice</title>
+  <link th:href="@{/css/style.css}" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a class="navbar-brand" th:href="@{/}">
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 3C14 3 8 7 8 14C8 17.5 10 21 14 24C18 21 20 17.5 20 14C20 7 14 3 14 3Z" fill="currentColor" opacity="0.9"/>
+        <path d="M14 8C14 8 10 11 10 14C10 16 11 18 14 20C17 18 18 16 18 14C18 11 14 8 14 8Z" fill="#0f0f0f"/>
+      </svg>
+      <span>Épice</span>
+    </a>
+    <div class="navbar-links">
+      <a th:href="@{/}">Trang chủ</a>
+      <a th:href="@{/recipes/public}">Công thức</a>
+      <a th:href="@{/recipes/create}">Đăng công thức</a>
+      <a th:href="@{/recipes/my-recipes}">Công thức của tôi</a>
+      <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">Quản trị</a>
+      <div class="divider"></div>
+      <form th:action="@{/logout}" method="post" style="display:inline;">
+        <button type="submit" class="btn-ghost">Đăng xuất</button>
+      </form>
+    </div>
+  </nav>
+
+  <div th:if="${success}" class="page-container narrow">
+    <div class="alert alert-success" th:text="${success}"></div>
+  </div>
+  <div th:if="${error}" class="page-container narrow">
+    <div class="alert alert-error" th:text="${error}"></div>
+  </div>
+
+  <div class="page-container">
+    <div class="section-header">
+      <h2 class="section-title">Đăng công thức <em>mới</em></h2>
+    </div>
+
+    <div class="form-card" style="max-width:720px;">
+      <div class="form-subtitle" style="margin-bottom:1.5rem;">
+        Công thức của bạn sẽ được gửi cho quản trị viên duyệt trước khi hiển thị công khai.
+      </div>
+
+      <form th:action="@{/recipes/create}" method="post" enctype="multipart/form-data">
+
+        <div class="form-group">
+          <label class="form-label" for="title">Tên món ăn *</label>
+          <input class="form-input" type="text" id="title" name="title" required placeholder="Ví dụ: Phở bò Hà Nội"/>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="description">Giới thiệu món ăn</label>
+          <textarea class="form-textarea" id="description" name="description" placeholder="Một vài câu giới thiệu về món ăn..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ingredients">Nguyên liệu *</label>
+          <textarea class="form-textarea" id="ingredients" name="ingredients" required placeholder="Mỗi nguyên liệu một dòng&#10;Ví dụ:&#10;- 200g thịt bò&#10;- 1 củ hành tây" style="min-height:150px;"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="steps">Các bước thực hiện *</label>
+          <textarea class="form-textarea" id="steps" name="steps" required placeholder="Bước 1: ...&#10;Bước 2: ..." style="min-height:180px;"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="coverImage">Ảnh bìa</label>
+          <input class="form-input" type="file" id="coverImage" name="coverImage" accept="image/*" style="padding: 0.5rem;"/>
+          <div class="form-hint">Định dạng: JPG, PNG, WebP. Dung lượng tối đa 5MB.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="images">Ảnh minh họa</label>
+          <input class="form-input" type="file" name="images" accept="image/*" multiple style="padding: 0.5rem;"/>
+          <div class="form-hint">Có thể chọn nhiều ảnh cùng lúc.</div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-gold">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Gửi công thức
+          </button>
+          <a th:href="@{/recipes/my-recipes}" class="btn-ghost">Hủy</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-brand">Épice</div>
+    Nền tảng chia sẻ công thức nấu ăn cao cấp
+  </footer>
+
+</body>
+</html>

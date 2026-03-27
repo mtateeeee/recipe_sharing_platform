@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title th:text="${pageTitle != null ? pageTitle + ' — Épice' : 'Épice — Nền tảng chia sẻ công thức'}">Épice</title>
+  <link th:href="@{/css/style.css}" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a class="navbar-brand" th:href="@{/}">
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 3C14 3 8 7 8 14C8 17.5 10 21 14 24C18 21 20 17.5 20 14C20 7 14 3 14 3Z" fill="currentColor" opacity="0.9"/>
+        <path d="M14 8C14 8 10 11 10 14C10 16 11 18 14 20C17 18 18 16 18 14C18 11 14 8 14 8Z" fill="#0f0f0f"/>
+      </svg>
+      <span>Épice</span>
+    </a>
+    <div class="navbar-links">
+      <a th:href="@{/}">Trang chủ</a>
+      <a th:href="@{/recipes/public}">Công thức</a>
+      <a sec:authorize="hasAnyRole('USER','ADMIN')" th:href="@{/recipes/create}">Đăng công thức</a>
+      <a sec:authorize="hasAnyRole('USER','ADMIN')" th:href="@{/recipes/my-recipes}">Công thức của tôi</a>
+      <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">Quản trị</a>
+      <div class="divider"></div>
+      <a sec:authorize="isAnonymous()" class="btn-ghost" th:href="@{/login}">Đăng nhập</a>
+      <a sec:authorize="isAnonymous()" class="btn-gold" th:href="@{/register}">Đăng ký</a>
+      <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="display:inline;">
+        <button type="submit" class="btn-ghost">Đăng xuất</button>
+      </form>
+    </div>
+  </nav>
+
+  <div th:if="${success}" class="page-container narrow">
+    <div class="alert alert-success" th:text="${success}"></div>
+  </div>
+  <div th:if="${error}" class="page-container narrow">
+    <div class="alert alert-error" th:text="${error}"></div>
+  </div>
+
+  <th:block th:replace="~{::content}">Content</th:block>
+
+  <footer class="footer">
+    <div class="footer-brand">Épice</div>
+    Nền tảng chia sẻ công thức nấu ăn cao cấp
+  </footer>
+
+</body>
+</html>

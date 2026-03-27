@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Công thức của tôi — Épice</title>
+  <link th:href="@{/css/style.css}" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a class="navbar-brand" th:href="@{/}">
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 3C14 3 8 7 8 14C8 17.5 10 21 14 24C18 21 20 17.5 20 14C20 7 14 3 14 3Z" fill="currentColor" opacity="0.9"/>
+        <path d="M14 8C14 8 10 11 10 14C10 16 11 18 14 20C17 18 18 16 18 14C18 11 14 8 14 8Z" fill="#0f0f0f"/>
+      </svg>
+      <span>Épice</span>
+    </a>
+    <div class="navbar-links">
+      <a th:href="@{/}">Trang chủ</a>
+      <a th:href="@{/recipes/public}">Công thức</a>
+      <a sec:authorize="hasAnyRole('USER','ADMIN')" th:href="@{/recipes/create}">Đăng công thức</a>
+      <a sec:authorize="hasAnyRole('USER','ADMIN')" th:href="@{/recipes/my-recipes}">Công thức của tôi</a>
+      <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">Quản trị</a>
+      <div class="divider"></div>
+      <a sec:authorize="isAnonymous()" class="btn-ghost" th:href="@{/login}">Đăng nhập</a>
+      <a sec:authorize="isAnonymous()" class="btn-gold" th:href="@{/register}">Đăng ký</a>
+      <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="display:inline;">
+        <button type="submit" class="btn-ghost">Đăng xuất</button>
+      </form>
+    </div>
+  </nav>
+
+  <div th:if="${success}" class="page-container narrow">
+    <div class="alert alert-success" th:text="${success}"></div>
+  </div>
+  <div th:if="${error}" class="page-container narrow">
+    <div class="alert alert-error" th:text="${error}"></div>
+  </div>
+
+  <div class="page-container">
+    <div class="section-header">
+      <h2 class="section-title">Công thức <em>của tôi</em></h2>
+      <a th:href="@{/recipes/create}" class="btn-gold" style="font-size:0.85rem;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Đăng công thức mới
+      </a>
+    </div>
+
+    <div class="recipe-grid" th:if="${recipes != null and !recipes.isEmpty()}">
+      <a class="recipe-card" th:href="@{/recipes/view/{id}(id=${r.id})}" th:each="r : ${recipes}" style="text-decoration:none;">
+        <div class="recipe-card-cover"
+             th:style="${r.coverImageUrl != null} ? 'background-image: url(' + ${r.coverImageUrl} + ')' : ''">
+          <div class="cover-fallback" th:if="${r.coverImageUrl == null}">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+          </div>
+        </div>
+        <div class="recipe-card-body">
+          <h3 class="recipe-card-title" th:text="${r.title}">Tên món</h3>
+          <div class="recipe-card-meta">
+            <span class="badge badge-pending" th:if="${r.status.name() == 'PENDING'}">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Chờ duyệt
+            </span>
+            <span class="badge badge-approved" th:if="${r.status.name() == 'APPROVED'}">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Đã duyệt
+            </span>
+            <span class="badge badge-rejected" th:if="${r.status.name() == 'REJECTED'}">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Từ chối
+            </span>
+          </div>
+          <p class="recipe-card-desc" th:text="${r.description}" th:if="${r.description != null}">Mô tả</p>
+          <div class="recipe-card-footer">
+            <span></span>
+            <span class="btn-sm btn-sm-gold">Xem chi tiết</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div th:if="${recipes == null or recipes.isEmpty()}" class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+      <p>Bạn chưa đăng công thức nào.</p>
+      <a th:href="@{/recipes/create}" class="btn-gold">Đăng công thức đầu tiên</a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-brand">Épice</div>
+    Nền tảng chia sẻ công thức nấu ăn cao cấp
+  </footer>
+
+</body>
+</html>
