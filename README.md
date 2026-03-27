@@ -5,12 +5,12 @@ A social networking application for sharing cooking recipes: users post recipes 
 ## Architecture (Conceptual)
 Frontend (Recipe app): Web interface with a yellow, kitchen-themed design.
 
-- ** JWT: Authentication between client and backend.
-- ** Public Access: View recipes without requiring a login.
-- ** Recipes Service: Manages recipes, uploads, and approval processes.
-- ** Chef Service: Manages users (Chefs) and roles.
-- ** Image Processing Service: Handles image processing (resizing, storage).
-- ** Database: H2 (storing Chefs and Recipes).
+- **JWT: Authentication between client and backend.
+- **Public Access: View recipes without requiring a login.
+- **Recipes Service: Manages recipes, uploads, and approval processes.
+- **Chef Service: Manages users (Chefs) and roles.
+- **Image Processing Service: Handles image processing (resizing, storage).
+- **Database: H2 (storing Chefs and Recipes).
 
 ## Roles & Permissions
 
