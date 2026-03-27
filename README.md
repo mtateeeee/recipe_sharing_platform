@@ -7,14 +7,14 @@ A social networking application for sharing cooking recipes: users post recipes 
 ### 1. Home Screen
 ![Home Page](img/homepage.jpg)
 
-### 2. Movie Detail Screen
-![Movie Detail](img/MOVIE%20DETAIL%20PAGE.png)
+### 2. Admin Screen
+![Movie Detail](img/adminpage.jpg)
 
-### 3. Playback / Watching Screen
-![Movie Watch](img/MOVIE%20WATCH%20PAGE.png)
+### 3. Login Screen
+![Movie Watch](img/login.jpg)
 
-### 4. Movie Loading Screen
-![Loading Movie](img/LOADING%20MOVIE%20PAGE.png)
+### 4. Sign up Screen
+![Loading Movie](img/signup.jpg)
 
 ## Architecture (Conceptual)
 Frontend (Recipe app): Web interface with a yellow, kitchen-themed design.
